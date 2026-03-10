@@ -80,7 +80,13 @@ function AppInner() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 flex-1">
+      <main
+        className={`w-full flex-1 ${
+          tab === "records"
+            ? "px-2 sm:px-4 py-4"
+            : "max-w-7xl mx-auto px-4 sm:px-6 py-6"
+        }`}
+      >
         {tab === "add" ? <AddBrokerageForm /> : <AllRecordsTable />}
       </main>
 
