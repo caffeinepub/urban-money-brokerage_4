@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/assets/fonts/CabinetGrotesk.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0.97 0 0;
+    --foreground: 0.18 0.01 260;
+    --card: 1 0 0;
+    --card-foreground: 0.18 0.01 260;
+    --popover: 1 0 0;
+    --popover-foreground: 0.18 0.01 260;
+    --primary: 0.18 0.02 255;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.94 0.01 260;
+    --secondary-foreground: 0.18 0.01 260;
+    --muted: 0.94 0.01 260;
+    --muted-foreground: 0.5 0.02 260;
+    --accent: 0.94 0.01 260;
+    --accent-foreground: 0.18 0.01 260;
+    --destructive: 0.55 0.22 27;
+    --destructive-foreground: 1 0 0;
+    --border: 0.88 0.01 260;
+    --input: 0.88 0.01 260;
+    --ring: 0.18 0.02 255;
+    --radius: 0.375rem;
+    --chart-1: 0.65 0.18 255;
+    --chart-2: 0.65 0.15 165;
+    --chart-3: 0.65 0.18 35;
+    --chart-4: 0.65 0.18 295;
+    --chart-5: 0.65 0.18 15;
+    --sidebar: 0.18 0.02 255;
+    --sidebar-foreground: 1 0 0;
+    --sidebar-primary: 0.6 0.15 255;
+    --sidebar-primary-foreground: 1 0 0;
+    --sidebar-accent: 0.25 0.03 255;
+    --sidebar-accent-foreground: 1 0 0;
+    --sidebar-border: 0.28 0.03 255;
+    --sidebar-ring: 0.6 0.15 255;
+
+    /* Custom app tokens */
+    --navy: 0.165 0.025 258;
+    --navy-dark: 0.13 0.022 258;
+    --navy-mid: 0.22 0.03 258;
+    --amber: 0.78 0.16 75;
+    --green-badge: 0.55 0.15 155;
+    --yellow-badge: 0.72 0.15 85;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .print-table th,
+  .print-table td {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  .print-table th {
+    background: #1e293b !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
