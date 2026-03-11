@@ -28,6 +28,5 @@ export interface backendInterface {
     getAllRecords(): Promise<Array<BrokerageRecord>>;
     getNextSerialNumber(): Promise<bigint>;
     getRecordCount(): Promise<bigint>;
-    getRecordsByRemark(remark: string): Promise<Array<BrokerageRecord>>;
     updateRecord(id: bigint, finance: string, customerName: string, mcf: string, product: string, grossAmount: number | null, netAmount: number | null, loanAmount: number | null, brokerageReceivedDate: string | null, bankReceivedDate: string | null, remark: string): Promise<boolean>;
 }

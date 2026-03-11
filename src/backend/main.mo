@@ -1,11 +1,9 @@
-import Map "mo:core/Map";
-import Array "mo:core/Array";
 import Time "mo:core/Time";
+import List "mo:core/List";
 import Runtime "mo:core/Runtime";
-import Iter "mo:core/Iter";
-import Text "mo:core/Text";
-import Nat "mo:core/Nat";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   public type BrokerageRecord = {
     id : Nat;
@@ -23,11 +21,10 @@ actor {
     createdAt : Int;
   };
 
-  let records = Map.empty<Nat, BrokerageRecord>();
-  var nextId = 1;
-  var nextSerialNumber = 1;
+  var records : List.List<BrokerageRecord> = List.empty<BrokerageRecord>();
+  var nextId : Nat = 1;
 
-  public shared ({ caller }) func addRecord(
+  public shared func addRecord(
     finance : Text,
     customerName : Text,
     mcf : Text,
@@ -39,9 +36,10 @@ actor {
     bankReceivedDate : ?Text,
     remark : Text,
   ) : async Nat {
+    let serialNumber = records.size() + 1;
     let record : BrokerageRecord = {
       id = nextId;
-      serialNumber = nextSerialNumber;
+      serialNumber;
       finance;
       customerName;
       mcf;
@@ -54,15 +52,13 @@ actor {
       remark;
       createdAt = Time.now();
     };
-
-    records.add(nextId, record);
+    records.add(record);
     let currentId = nextId;
     nextId += 1;
-    nextSerialNumber += 1;
     currentId;
   };
 
-  public shared ({ caller }) func updateRecord(
+  public shared func updateRecord(
     id : Nat,
     finance : Text,
     customerName : Text,
@@ -75,59 +71,60 @@ actor {
     bankReceivedDate : ?Text,
     remark : Text,
   ) : async Bool {
-    switch (records.get(id)) {
-      case (null) {
-        Runtime.trap("Record not found with id: " # id.toText());
-      };
-      case (?existing) {
-        let updatedRecord : BrokerageRecord = {
-          existing with
-          finance;
-          customerName;
-          mcf;
-          product;
-          grossAmount;
-          netAmount;
-          loanAmount;
-          brokerageReceivedDate;
-          bankReceivedDate;
-          remark;
+    var found = false;
+    var existingSerial : Nat = 0;
+    let filtered = records.filter(
+      func(r : BrokerageRecord) : Bool {
+        if (r.id == id) {
+          found := true;
+          existingSerial := r.serialNumber;
+          false;
+        } else {
+          true;
         };
-        records.add(id, updatedRecord);
-        true;
-      };
-    };
-  };
-
-  public shared ({ caller }) func deleteRecord(id : Nat) : async Bool {
-    switch (records.get(id)) {
-      case (null) {
-        Runtime.trap("Record not found with id: " # id.toText());
-      };
-      case (?_) {
-        records.remove(id);
-        true;
-      };
-    };
-  };
-
-  public query ({ caller }) func getAllRecords() : async [BrokerageRecord] {
-    records.values().toArray();
-  };
-
-  public query ({ caller }) func getRecordsByRemark(remark : Text) : async [BrokerageRecord] {
-    records.values().toArray().filter(
-      func(record) {
-        Text.equal(record.remark, remark);
       }
     );
+    if (not found) {
+      Runtime.trap("Record not found");
+    };
+    records := filtered;
+    let updatedRecord : BrokerageRecord = {
+      id;
+      serialNumber = existingSerial;
+      finance;
+      customerName;
+      mcf;
+      product;
+      grossAmount;
+      netAmount;
+      loanAmount;
+      brokerageReceivedDate;
+      bankReceivedDate;
+      remark;
+      createdAt = Time.now();
+    };
+    records.add(updatedRecord);
+    true;
   };
 
-  public query ({ caller }) func getRecordCount() : async Nat {
+  public shared func deleteRecord(id : Nat) : async Bool {
+    let before = records.size();
+    records := records.filter(func(r : BrokerageRecord) : Bool { r.id != id });
+    if (records.size() == before) {
+      Runtime.trap("Record not found");
+    };
+    true;
+  };
+
+  public query func getAllRecords() : async [BrokerageRecord] {
+    records.toArray();
+  };
+
+  public query func getRecordCount() : async Nat {
     records.size();
   };
 
-  public query ({ caller }) func getNextSerialNumber() : async Nat {
-    nextSerialNumber;
+  public query func getNextSerialNumber() : async Nat {
+    records.size() + 1;
   };
 };

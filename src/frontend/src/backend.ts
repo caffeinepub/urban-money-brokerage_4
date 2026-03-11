@@ -110,7 +110,6 @@ export interface backendInterface {
     getAllRecords(): Promise<Array<BrokerageRecord>>;
     getNextSerialNumber(): Promise<bigint>;
     getRecordCount(): Promise<bigint>;
-    getRecordsByRemark(remark: string): Promise<Array<BrokerageRecord>>;
     updateRecord(id: bigint, finance: string, customerName: string, mcf: string, product: string, grossAmount: number | null, netAmount: number | null, loanAmount: number | null, brokerageReceivedDate: string | null, bankReceivedDate: string | null, remark: string): Promise<boolean>;
 }
 import type { BrokerageRecord as _BrokerageRecord } from "./declarations/backend.did.d.ts";
@@ -184,20 +183,6 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getRecordCount();
             return result;
-        }
-    }
-    async getRecordsByRemark(arg0: string): Promise<Array<BrokerageRecord>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getRecordsByRemark(arg0);
-                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getRecordsByRemark(arg0);
-            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async updateRecord(arg0: bigint, arg1: string, arg2: string, arg3: string, arg4: string, arg5: number | null, arg6: number | null, arg7: number | null, arg8: string | null, arg9: string | null, arg10: string): Promise<boolean> {

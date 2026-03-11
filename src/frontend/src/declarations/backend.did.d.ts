@@ -45,7 +45,6 @@ export interface _SERVICE {
   'getAllRecords' : ActorMethod<[], Array<BrokerageRecord>>,
   'getNextSerialNumber' : ActorMethod<[], bigint>,
   'getRecordCount' : ActorMethod<[], bigint>,
-  'getRecordsByRemark' : ActorMethod<[string], Array<BrokerageRecord>>,
   'updateRecord' : ActorMethod<
     [
       bigint,

@@ -45,11 +45,6 @@ export const idlService = IDL.Service({
   'getAllRecords' : IDL.Func([], [IDL.Vec(BrokerageRecord)], ['query']),
   'getNextSerialNumber' : IDL.Func([], [IDL.Nat], ['query']),
   'getRecordCount' : IDL.Func([], [IDL.Nat], ['query']),
-  'getRecordsByRemark' : IDL.Func(
-      [IDL.Text],
-      [IDL.Vec(BrokerageRecord)],
-      ['query'],
-    ),
   'updateRecord' : IDL.Func(
       [
         IDL.Nat,
@@ -109,11 +104,6 @@ export const idlFactory = ({ IDL }) => {
     'getAllRecords' : IDL.Func([], [IDL.Vec(BrokerageRecord)], ['query']),
     'getNextSerialNumber' : IDL.Func([], [IDL.Nat], ['query']),
     'getRecordCount' : IDL.Func([], [IDL.Nat], ['query']),
-    'getRecordsByRemark' : IDL.Func(
-        [IDL.Text],
-        [IDL.Vec(BrokerageRecord)],
-        ['query'],
-      ),
     'updateRecord' : IDL.Func(
         [
           IDL.Nat,
